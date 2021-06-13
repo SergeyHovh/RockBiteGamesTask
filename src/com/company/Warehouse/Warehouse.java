@@ -5,55 +5,77 @@ import java.util.Map;
 
 public class Warehouse {
     private Map<Material, Integer> materialMap = new EnumMap<>(Material.class);
+    private String name;
 
-    private int get(Object key) {
+    public Warehouse(String name) {
+        this.name = name;
+    }
+
+    public boolean exists(Material material) {
+        return materialMap.containsKey(material);
+    }
+
+    public int lookUp(Object key) {
         return materialMap.get(key) == null ? 0 : materialMap.get(key);
     }
 
-    public void addMaterial(Material key, Integer value) {
+    public boolean addMaterial(Material key, Integer value) {
         System.out.println("======");
         int maxCapacity = key.getMaxCapacity();
-        int current = get(key);
+        int current = lookUp(key);
         int availableCapacity = maxCapacity - current;
         String materialName = key.getName();
         if (availableCapacity > value) {
-            System.out.println("INSERTING " + value + " UNITS OF " + materialName);
-            System.out.println("FREE STORAGE LEFT FOR " + materialName + ": " + (availableCapacity - value) + "/" + maxCapacity);
+            System.out.println("INSERTING " + value + " UNITS OF " + materialName + " TO: " + name);
+            System.out.println("CURRENT BALANCE OF " + materialName + " IS : " + (current + value) + "/" + maxCapacity);
             if (materialMap.containsKey(key)) {
                 materialMap.put(key, current + value);
             } else {
                 materialMap.put(key, value);
             }
+            return true;
         } else {
-            System.out.println("FAILED TO INSERT " + value + " UNITS OF " + materialName);
+            System.out.println("------");
+            System.out.println("FAILED TO INSERT " + value + " UNITS OF " + materialName + " TO: " + name);
             System.out.println("MAX CAPACITY FOR " + materialName + " IS: " + maxCapacity);
-            System.out.println("FREE STORAGE LEFT FOR " + materialName + ": " + availableCapacity + " UNITS");
+            System.out.println("CURRENT BALANCE OF " + materialName + " IS : " + current + "/" + maxCapacity);
+            System.out.println("------");
+            return false;
         }
     }
 
-    public void removeMaterial(Material key, Integer value) {
+    public boolean removeMaterial(Material key, Integer value) {
         System.out.println("======");
         int maxCapacity = key.getMaxCapacity();
-        int current = get(key);
-        int availableCapacity = maxCapacity - current;
+        int current = lookUp(key);
         String materialName = key.getName();
         if (materialMap.containsKey(key)) {
             if (current >= value) {
                 System.out.println("REMOVING " + value + " UNITS OF " + materialName);
-                System.out.println("FREE STORAGE LEFT FOR " + materialName + ": " + (availableCapacity + value) + "/" + maxCapacity);
+                System.out.println("CURRENT BALANCE OF " + materialName + " IS : " + (current - value) + "/" + maxCapacity);
                 materialMap.put(key, current - value);
+                return true;
             } else {
+                System.out.println("------");
                 System.out.println("FAILED TO REMOVE " + value + " UNITS OF " + materialName);
                 System.out.println("CANNOT REMOVE MORE THAN AVAILABLE");
                 System.out.println("CURRENT BALANCE OF " + materialName + " IS : " + current + "/" + maxCapacity);
+                System.out.println("------");
+                return false;
             }
         }
+        return false;
     }
 
     @Override
     public String toString() {
-        return "Warehouse{" +
-                "materialMap=" + materialMap +
-                '}';
+        return "Warehouse {" +
+                "\n\tName: " + name +
+                "\n\tMaterials: " + materialMap +
+                "\n}";
+    }
+
+    public String getName() {
+        return name;
     }
 }
