@@ -63,6 +63,7 @@ public class CrazyBigNumber {
         } else {
             res = getMax(number1, number2);
         }
+        res.round();
 
         return res;
     }
@@ -102,8 +103,8 @@ public class CrazyBigNumber {
                 res.setNumber(res.getNumber() * 1000);
                 res.setNumberOfThousands(res.getNumberOfThousands() - 1);
             }
-            res.round();
         }
+        res.round();
 
         return res;
     }
@@ -159,7 +160,7 @@ public class CrazyBigNumber {
     }
 
     public void round() {
-        number = (double) Math.round(number);
+        number = roundAvoid(number, 3);
     }
 
     public void setNumber(double number) {
@@ -196,5 +197,10 @@ public class CrazyBigNumber {
             }
         }
         return -1;
+    }
+
+    public static double roundAvoid(double value, int places) {
+        double scale = Math.pow(10, places);
+        return Math.round(value * scale) / scale;
     }
 }
