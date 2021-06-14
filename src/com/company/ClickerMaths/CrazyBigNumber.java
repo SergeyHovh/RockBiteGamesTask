@@ -3,7 +3,7 @@ package com.company.ClickerMaths;
 import java.util.Objects;
 
 public class CrazyBigNumber {
-    private static final char[] CRAZY_BIG_UNITS =
+    private final char[] CRAZY_BIG_UNITS =
             {
                     ' ', 'K', 'M', 'B',
                     'T', 'q', 'Q', 's',
@@ -22,6 +22,9 @@ public class CrazyBigNumber {
         this.numberOfThousands = numberOfThousands;
     }
 
+    /**
+     * @param crazyBigNumber string representation of a crazy big number
+     */
     public CrazyBigNumber(String crazyBigNumber) {
         crazyBigNumber = crazyBigNumber.replaceAll("\\s+", ""); // removing whitespaces
         String unit = crazyBigNumber.substring(crazyBigNumber.length() - 1);
@@ -117,6 +120,9 @@ public class CrazyBigNumber {
         return mult(number1, number2, 0);
     }
 
+    /**
+     * general method for multiplication
+     */
     private static CrazyBigNumber mult(CrazyBigNumber number1, double number2, int power) {
         CrazyBigNumber res = new CrazyBigNumber(0, 0);
         double resultingNumber = number1.getNumber() * number2;
@@ -143,6 +149,10 @@ public class CrazyBigNumber {
         }
     }
 
+    /**
+     * @param number other Crazy big number to be compared to this one
+     * @return true if this number is less than the other one
+     */
     public boolean isLess(CrazyBigNumber number) {
         if (this.getNumberOfThousands() == number.getNumberOfThousands()) {
             return this.getNumber() < number.getNumber();
@@ -160,7 +170,8 @@ public class CrazyBigNumber {
     }
 
     public void round() {
-        number = roundAvoid(number, 3);
+        double scale = Math.pow(10, 3);
+        number = Math.round(number * scale) / scale;
     }
 
     public void setNumber(double number) {
@@ -197,10 +208,5 @@ public class CrazyBigNumber {
             }
         }
         return -1;
-    }
-
-    public static double roundAvoid(double value, int places) {
-        double scale = Math.pow(10, places);
-        return Math.round(value * scale) / scale;
     }
 }

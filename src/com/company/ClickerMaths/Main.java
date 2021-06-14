@@ -1,6 +1,4 @@
-package com.company;
-
-import com.company.ClickerMaths.CrazyBigNumber;
+package com.company.ClickerMaths;
 
 public class Main {
 
